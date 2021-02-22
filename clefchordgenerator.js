@@ -21,7 +21,7 @@ exports.generateChordProgression = function(chosenKey, chosenOperator, chosenAdj
         if (chosenOperator == "#")
             ptr = (ptr + 1) % 12;
         else if (chosenOperator == '\u266D')
-            ptr = (ptr - 1) % 12;
+            ptr = (ptr - 1 == -1) ? 11 : (ptr - 1) % 12;
 
         chordsInProgression.push(keys[ptr]);
 
@@ -48,11 +48,10 @@ exports.generateChordProgression = function(chosenKey, chosenOperator, chosenAdj
         for (ptr = 0; ptr < 12; ptr++)
             if (keys[ptr] == chosenKey)
                 break;
-
         if (chosenOperator == "#")
             ptr = (ptr + 1) % 12;
         else if (chosenOperator == '\u266D')
-            ptr = (ptr - 1) % 12;
+            ptr = (ptr - 1 == -1) ? 11 : (ptr - 1) % 12;
 
         chordsInProgression.push(keys[ptr] + "m");
 

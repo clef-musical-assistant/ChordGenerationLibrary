@@ -1,6 +1,6 @@
 {
   "name": "clefchordgenerator",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Algorithmically generate chord progressions.",
   "main": "clefchordgenerator.js",
   "scripts": {
