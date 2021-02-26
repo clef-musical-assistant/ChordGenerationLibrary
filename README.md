@@ -19,7 +19,7 @@ You then include the library in your project as you would any node module:
 import sampleName from 'clefchordgenerator';
 ```
 
-The package features a single callable function,```javascript var chordProgression = {progToRender: '', romanProgToRender: '', progForRNN: ''};```, that returns an object containing three strings. The object is structured like so:
+The package features a single callable function,```generateChordProgression(chosenKey, chosenOperator, chosenAdjective)```, that returns an object containing three strings. The object is structured like so:
 
 ```javascript
 var chordProgression = {progToRender: '', romanProgToRender: '', progForRNN: ''};
