@@ -5,7 +5,7 @@ exports.generateChordProgression = function(chosenKey, chosenOperator, chosenAdj
     var majorProgression = [0, 2, 2, 1, 2, 2, 2];
     var minorProgression = [0, 2, 1, 2, 2, 1, 2];
     var chordsInProgression = [];
-    var chordProgression = {progToRender: '', romanProgToRender: '', progForRNN: ''};
+    var chordProgression = {progToRender: '', romanProgToRender: '', progForRNN: '', chords: []};
     let picked = new Set();
     var counter = 0, ptr;
 
@@ -85,6 +85,7 @@ exports.generateChordProgression = function(chosenKey, chosenOperator, chosenAdj
 
             chordProgression.progToRender += chordsInProgression[ptr];
             chordProgression.progForRNN += chordsInProgression[ptr];
+            chordProgression.chords.push(chordsInProgression[ptr]);
  
             if (chordsInProgression[ptr].includes('m') || chordsInProgression[ptr].includes('dim'))
                 chordProgression.romanProgToRender += minorRomanNumerals[ptr];
