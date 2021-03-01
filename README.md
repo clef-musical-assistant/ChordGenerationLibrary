@@ -25,16 +25,17 @@ You then include the library in your project as you would any node module:
 import sampleName from 'clefchordgenerator';
 ```
 
-The package features a single callable function that returns an object containing three strings. The object is structured like so:
+The package features a single callable function that returns an object containing three strings and an array of strings. The object is structured like so:
 
 ```javascript
-var chordProgression = {progToRender: '', romanProgToRender: '', progForRNN: ''};
+var chordProgression = {progToRender: '', romanProgToRender: '', progForRNN: '', chords: []};
 ```
 
 An example of the returned object is shown below.
 
 ```
 Object {
+  "chords": Dm,F,C,Bdim
   "progForRNN": "DmFCBdim",
   "progToRender": "Dm - F - C - Bdim",
   "romanProgToRender": "ii - IV - I - vii",
