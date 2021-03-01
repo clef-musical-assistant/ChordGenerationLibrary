@@ -5,7 +5,7 @@ exports.generateChordProgression = function(chosenKey, chosenOperator, chosenAdj
     var majorProgression = [0, 2, 2, 1, 2, 2, 2];
     var minorProgression = [0, 2, 1, 2, 2, 1, 2];
     var chordsInProgression = [];
-    var chordProgression = [];
+    var chordProgression = {progToRender: '', romanProgToRender: '', progForRNN: ''};
     let picked = new Set();
     var counter = 0, ptr;
 
@@ -75,10 +75,6 @@ exports.generateChordProgression = function(chosenKey, chosenOperator, chosenAdj
     else
         chordsInProgression = generateMinorProgression();
 
-    chordProgression.push("");
-    chordProgression.push("");
-    chordProgression.push("");
-
     while (counter < 4)
     {
         ptr = Math.floor(Math.random() * 100) % chordsInProgression.length;
@@ -87,18 +83,18 @@ exports.generateChordProgression = function(chosenKey, chosenOperator, chosenAdj
         {
             picked.add(ptr);
 
-            chordProgression[0] += chordsInProgression[ptr];
-            chordProgression[2] += chordsInProgression[ptr];
+            chordProgression.progToRender += chordsInProgression[ptr];
+            chordProgression.progForRNN += chordsInProgression[ptr];
  
             if (chordsInProgression[ptr].includes('m') || chordsInProgression[ptr].includes('dim'))
-                chordProgression[1] += minorRomanNumerals[ptr];
+                chordProgression.romanProgToRender += minorRomanNumerals[ptr];
             else
-                chordProgression[1] += majorRomanNumerals[ptr];
+                chordProgression.romanProgToRender += majorRomanNumerals[ptr];
 
             if(counter != 3)
             {
-                chordProgression[0] += ' - ';
-                chordProgression[1] += ' - ';
+                chordProgression.progToRender += ' - ';
+                chordProgression.romanProgToRender += ' - ';
             }
 
             counter++;
