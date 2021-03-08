@@ -1,4 +1,5 @@
 var chord = require("@tonaljs/tonal").Chord;
+var note = require("@tonaljs/tonal").Note;
 
 exports.generateChordProgression = function(chosenKey, chosenOperator, chosenAdjective) {
     var keys = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
@@ -92,15 +93,28 @@ exports.generateChordProgression = function(chosenKey, chosenOperator, chosenAdj
             if (chordsInProgression[ptr].includes('m') || chordsInProgression[ptr].includes('dim'))
             {
                 if(chordsInProgression[ptr].includes('dim'))
+                {
                     chordProgression.notesInChords.push(chord.get(chordsInProgression[ptr]).notes);
+
+                    for(var ind = 0; ind < 3; ind++)
+                        chordProgression.notesInChords[counter][ind] = note.midi(chordProgression.notesInChords[counter][ind] + "4")
+                }
                 else
+                {
                     chordProgression.notesInChords.push(chord.get(chordsInProgression[ptr].substring(0, chordsInProgression[ptr].length-1) + "min").notes);
-                    
+
+                    for(var ind = 0; ind < 3; ind++)
+                        chordProgression.notesInChords[counter][ind] = note.midi(chordProgression.notesInChords[counter][ind] + "4")
+                }
                 chordProgression.romanProgToRender += minorRomanNumerals[ptr];
             }
             else
             {
                 chordProgression.notesInChords.push(chord.get(chordsInProgression[ptr]).notes);
+
+                for(var ind = 0; ind < 3; ind++)
+                    chordProgression.notesInChords[counter][ind] = note.midi(chordProgression.notesInChords[counter][ind] + "4")
+
                 chordProgression.romanProgToRender += majorRomanNumerals[ptr];
             }
 
