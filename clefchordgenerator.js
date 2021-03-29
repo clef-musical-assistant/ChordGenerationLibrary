@@ -2,7 +2,8 @@ var chord = require("@tonaljs/tonal").Chord;
 var note = require("@tonaljs/tonal").Note;
 
 exports.generateChordProgression = function(chosenKey, chosenOperator, chosenAdjective) {
-    var keys = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+    var keysSharp = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+    var keysFlat = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"];
     var majorRomanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'];
     var minorRomanNumerals = ['i', 'ii', 'iii', 'iv', 'v', 'vi', 'vii'];
     var majorProgression = [0, 2, 2, 1, 2, 2, 2];
@@ -12,10 +13,13 @@ exports.generateChordProgression = function(chosenKey, chosenOperator, chosenAdj
     let picked = new Set();
     var counter = 0, ptr;
 
-    const generateMajorProgression = function()
+    const generateMajorProgression = function(op)
     {
         var chordsInProgression = [];
         var ptr;
+        if(op == "#")
+            var keys = keysSharp;
+        else var keys = keysFlat;
 
         for (ptr = 0; ptr < 12; ptr++)
             if (keys[ptr] == chosenKey)
@@ -43,10 +47,13 @@ exports.generateChordProgression = function(chosenKey, chosenOperator, chosenAdj
         return chordsInProgression;
     }
 
-    const generateMinorProgression = function()
+    const generateMinorProgression = function(op)
     {
         var chordsInProgression = [];
         var ptr;
+        if(op == "#")
+            var keys = keysSharp;
+        else var keys = keysFlat;
 
         for (ptr = 0; ptr < 12; ptr++)
             if (keys[ptr] == chosenKey)
@@ -74,9 +81,9 @@ exports.generateChordProgression = function(chosenKey, chosenOperator, chosenAdj
     }
 
     if (chosenAdjective == "Major")
-        chordsInProgression = generateMajorProgression();
+        chordsInProgression = generateMajorProgression(chosenOperator);
     else
-        chordsInProgression = generateMinorProgression();
+        chordsInProgression = generateMinorProgression(chosenOperator);
 
     while (counter < 4)
     {
