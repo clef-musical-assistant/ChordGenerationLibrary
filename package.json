@@ -1,11 +1,43 @@
 {
-  "name": "clefchordgenerator",
-  "version": "1.1.2",
+  "_from": "clefchordgenerator",
+  "_id": "clefchordgenerator@1.1.2",
+  "_inBundle": false,
+  "_integrity": "sha512-usx/PDLcOldegHYt8gUWaWVIuyxDzYlPXkCRRNr+/JVjhiFyXXX3ubfx+1myoeISsPDj5emtOSRkXbpLAmTc0A==",
+  "_location": "/clefchordgenerator",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "clefchordgenerator",
+    "name": "clefchordgenerator",
+    "escapedName": "clefchordgenerator",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/clefchordgenerator/-/clefchordgenerator-1.1.1.tgz",
+  "_shasum": "2911b65a510a29994c98e1dcc1832df299a09b6a",
+  "_spec": "clefchordgenerator",
+  "_where": "C:\\Users\\dusti\\Documents\\chordProgression",
+  "author": {
+    "name": "Dustin Thompson",
+    "email": "dustin.ct1996@knights.ucf.edu"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+
+  },
+  "deprecated": false,
   "description": "Algorithmically generate chord progressions.",
+  "license": "ISC",
   "main": "clefchordgenerator.js",
+  "name": "clefchordgenerator",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Dustin Thompson <dustin.ct1996@knights.ucf.edu>",
-  "license": "ISC"
+  "version": "1.1.3"
 }
