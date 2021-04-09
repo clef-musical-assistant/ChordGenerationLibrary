@@ -1,6 +1,6 @@
-var coreTheory = require('clefchordgenerator/theory');
-var chord = require('clefchordgenerator/chord');
-var note = require('clefchordgenerator/note');
+var coreTheory = require('./theory');
+var chord = require('./chord');
+var note = require('./note');
 
 exports.generateChordProgression = function(root, operator, adjective, mood = 'N/A') {
     var chordProgression = {progToRender: '', romanProgToRender: '', progForRNN: '', chords: [], notesInChords: []};
@@ -91,8 +91,6 @@ exports.generateChordProgression = function(root, operator, adjective, mood = 'N
                 if (!picked.has(ptr))
                 {
                     picked.add(ptr);
-
-                    console.log(structure[counter] + " " + mood + " " + ptr + " " + allChords[ptr]);
 
                     chordProgression.progToRender += allChords[ptr];
                     chordProgression.progForRNN += allChords[ptr];

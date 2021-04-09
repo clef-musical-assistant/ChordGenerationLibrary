@@ -1,4 +1,4 @@
-var coreTheory = require('clefchordgenerator/theory');
+var coreTheory = require('./theory');
 
 exports.get = function(chord) 
 {

@@ -1,4 +1,4 @@
-var coreTheory = require('clefchordgenerator/theory');
+var coreTheory = require('./theory');
 
 exports.midi = function(note, octave = 0)
 {
