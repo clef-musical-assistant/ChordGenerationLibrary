@@ -1,14 +1,14 @@
 exports.theory = 
 {
-    keysSharp: 
+    keys:
     {
-        roots: ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"],
-        pattern: [0, 2, 2, 1, 2, 2, 2]
+        sharp: ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"],
+        flat: ["C", "D\u266D", "D", "E\u266D", "E", "F", "G\u266D", "G", "A\u266D", "A", "B\u266D", "B"]
     },
-    keysFlat: 
+    patterns:
     {
-        roots: ["C", "D\u266D", "D", "E\u266D", "E", "F", "G\u266D", "G", "A\u266D", "A", "B\u266D", "B"],
-        pattern: [0, 2, 1, 2, 2, 1, 2]
+        major: [0, 2, 2, 1, 2, 2, 2],
+        minor: [0, 2, 1, 2, 2, 1, 2]
     },
     majorRomanNumerals: ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'],
     minorRomanNumerals: ['i', 'ii', 'iii', 'iv', 'v', 'vi', 'vii'],
