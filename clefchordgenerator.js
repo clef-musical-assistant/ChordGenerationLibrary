@@ -1,137 +1,179 @@
-var chord = require("@tonaljs/tonal").Chord;
-var note = require("@tonaljs/tonal").Note;
+var coreTheory = require('./theory');
+var chord = require('./chord');
+var note = require('./note');
 
-exports.generateChordProgression = function(chosenKey, chosenOperator, chosenAdjective) {
-    var keysSharp = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
-    var keysFlat = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"];
-    var majorRomanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'];
-    var minorRomanNumerals = ['i', 'ii', 'iii', 'iv', 'v', 'vi', 'vii'];
-    var majorProgression = [0, 2, 2, 1, 2, 2, 2];
-    var minorProgression = [0, 2, 1, 2, 2, 1, 2];
-    var chordsInProgression = [];
-    var chordProgression = {progToRender: '', romanProgToRender: '', progForRNN: '', chords: [], notesInChords: []};
-    let picked = new Set();
+exports.generateChordProgression = function(root, operator, adjective, mood = 'N/A') {
+    var chordProgression = {testing: [], progToRender: '', romanProgToRender: '', progForRNN: '', chords: [], notesInChords: []};
     var counter = 0, ptr;
+    var allChords = [];
 
-    const generateMajorProgression = function(op)
+    const generateAllChordsMajor = function()
     {
-        var chordsInProgression = [];
-        var ptr;
-        if(op == "#")
-            var keys = keysSharp;
-        else var keys = keysFlat;
+        var keys;
+        var pattern = coreTheory.theory.patterns.major;
+
+        if(operator == "\u266D")
+            keys = coreTheory.theory.keys.flat;
+        else
+            keys = coreTheory.theory.keys.sharp;
 
         for (ptr = 0; ptr < 12; ptr++)
-            if (keys[ptr] == chosenKey)
+            if (keys[ptr] == root)
                 break;
 
-        if (chosenOperator == "#")
+        if (operator == "#")
             ptr = (ptr + 1) % 12;
-        else if (chosenOperator == '\u266D')
+        else if (operator == '\u266D')
             ptr = (ptr - 1 == -1) ? 11 : (ptr - 1) % 12;
 
-        chordsInProgression.push(keys[ptr]);
+        allChords.push(keys[ptr]);
 
         for (var i = 1; i < 7; i++)
         {
-            ptr += majorProgression[i];
+            ptr += pattern[i];
 
             if (i == 6)
-                chordsInProgression.push(keys[ptr % 12] + "dim");
+                allChords.push(keys[ptr % 12] + "dim");
             else if (6 % (i + 1) == 0)
-                chordsInProgression.push(keys[ptr % 12] + "m");
+                allChords.push(keys[ptr % 12] + "m");
             else
-                chordsInProgression.push(keys[ptr % 12]);
+                allChords.push(keys[ptr % 12]);
         }
 
-        return chordsInProgression;
+        return allChords;
     }
 
-    const generateMinorProgression = function(op)
+    const generateAllChordsMinor = function()
     {
-        var chordsInProgression = [];
-        var ptr;
-        if(op == "#")
-            var keys = keysSharp;
-        else var keys = keysFlat;
+        var keys;
+        var pattern = coreTheory.theory.patterns.minor;
+
+        if(operator == "\u266D")
+            keys = coreTheory.theory.keys.flat;
+        else 
+            keys = coreTheory.theory.keys.sharp;
 
         for (ptr = 0; ptr < 12; ptr++)
-            if (keys[ptr] == chosenKey)
+            if (keys[ptr] == root)
                 break;
-        if (chosenOperator == "#")
+
+        if (operator == "#")
             ptr = (ptr + 1) % 12;
-        else if (chosenOperator == '\u266D')
+        else if (operator == '\u266D')
             ptr = (ptr - 1 == -1) ? 11 : (ptr - 1) % 12;
 
-        chordsInProgression.push(keys[ptr] + "m");
+        allChords.push(keys[ptr] + "m");
 
         for (var i = 1; i < 7; i++)
         {
-            ptr += minorProgression[i];
+            ptr += pattern[i];
 
             if (i == 1)
-                chordsInProgression.push(keys[ptr % 12] + "dim");
+                allChords.push(keys[ptr % 12] + "dim");
             else if (20 % (i + 1) == 0)
-                chordsInProgression.push(keys[ptr % 12] + "m");
+                allChords.push(keys[ptr % 12] + "m");
             else
-                chordsInProgression.push(keys[ptr % 12]);
+                allChords.push(keys[ptr % 12]);
         }
 
-        return chordsInProgression;
+        return allChords;
     }
 
-    if (chosenAdjective == "Major")
-        chordsInProgression = generateMajorProgression(chosenOperator);
-    else
-        chordsInProgression = generateMinorProgression(chosenOperator);
-
-    while (counter < 4)
+    const generateFourChords = function(structure = ['0', '0', '0', '0'])
     {
-        ptr = Math.floor(Math.random() * 100) % chordsInProgression.length;
+        let picked = new Set();
 
-        if (!picked.has(ptr))
+        while (counter < 4)
         {
-            picked.add(ptr);
+            ptr = Math.floor(Math.random() * 100) % allChords.length;
 
-            chordProgression.progToRender += chordsInProgression[ptr];
-            chordProgression.progForRNN += chordsInProgression[ptr];
-            chordProgression.chords.push(chordsInProgression[ptr]);
- 
-            if (chordsInProgression[ptr].includes('m') || chordsInProgression[ptr].includes('dim'))
-            {
-                if(chordsInProgression[ptr].includes('dim'))
+            if(structure[counter] == '0' || 
+              (structure[counter] == 'm' && allChords[ptr].includes(structure[counter])) || 
+              (structure[counter] == 'M' && !allChords[ptr].includes('m')))
+                if (!picked.has(ptr))
                 {
-                    chordProgression.notesInChords.push(chord.get(chordsInProgression[ptr]).notes);
+                    picked.add(ptr);
 
-                    for(var ind = 0; ind < 3; ind++)
-                        chordProgression.notesInChords[counter][ind] = note.midi(chordProgression.notesInChords[counter][ind] + "4")
+                    chordProgression.progToRender += allChords[ptr];
+                    chordProgression.progForRNN += allChords[ptr];
+                    chordProgression.chords.push(allChords[ptr]);
+
+                    if (allChords[ptr].includes('m') || allChords[ptr].includes('dim'))
+                    {
+                        if(allChords[ptr].includes('dim'))
+                        {
+                            chordProgression.notesInChords.push(chord.get(allChords[ptr]).notes);
+
+                            for(var ind = 0; ind < 3; ind++)
+                                chordProgression.notesInChords[counter][ind] = note.midi(chordProgression.notesInChords[counter][ind], 4)
+                        }
+                        else
+                        {
+                            chordProgression.notesInChords.push(chord.get(allChords[ptr]).notes);
+
+                            for(var ind = 0; ind < 3; ind++)
+                                chordProgression.notesInChords[counter][ind] = note.midi(chordProgression.notesInChords[counter][ind], 4)
+                        }
+
+                        chordProgression.romanProgToRender += coreTheory.theory.minorRomanNumerals[ptr];
+                    }
+                    else
+                    {
+                        chordProgression.notesInChords.push(chord.get(allChords[ptr]).notes);
+
+                        for(var ind = 0; ind < 3; ind++)
+                            chordProgression.notesInChords[counter][ind] = note.midi(chordProgression.notesInChords[counter][ind], 4)
+
+                        chordProgression.romanProgToRender += coreTheory.theory.majorRomanNumerals[ptr];
+                    }
+
+                    if(counter != 3)
+                    {
+                        chordProgression.progToRender += ' - ';
+                        chordProgression.romanProgToRender += ' - ';
+                    }
+
+                    counter++;
                 }
-                else
-                {
-                    chordProgression.notesInChords.push(chord.get(chordsInProgression[ptr].substring(0, chordsInProgression[ptr].length-1) + "min").notes);
+        }
+    }
 
-                    for(var ind = 0; ind < 3; ind++)
-                        chordProgression.notesInChords[counter][ind] = note.midi(chordProgression.notesInChords[counter][ind] + "4")
-                }
-                chordProgression.romanProgToRender += minorRomanNumerals[ptr];
-            }
-            else
-            {
-                chordProgression.notesInChords.push(chord.get(chordsInProgression[ptr]).notes);
+    if (adjective == "Major")
+        generateAllChordsMajor();
+    else
+        generateAllChordsMinor();
 
-                for(var ind = 0; ind < 3; ind++)
-                    chordProgression.notesInChords[counter][ind] = note.midi(chordProgression.notesInChords[counter][ind] + "4")
+    chordProgression.testing = allChords;
 
-                chordProgression.romanProgToRender += majorRomanNumerals[ptr];
-            }
+    if(mood == 'N/A')
+        generateFourChords();
+    else
+    {
+        var num;
 
-            if(counter != 3)
-            {
-                chordProgression.progToRender += ' - ';
-                chordProgression.romanProgToRender += ' - ';
-            }
+        if(mood == 'Happy')
+        {
+            num = Math.floor(Math.random() * 100) % coreTheory.theory.progressions.happy.length;
 
-            counter++;
+            generateFourChords(structure = coreTheory.theory.progressions.happy[num]);
+        }
+        else if(mood == 'Sad')
+        {
+            num = Math.floor(Math.random() * 100) % coreTheory.theory.progressions.sad.length;
+
+            generateFourChords(structure = coreTheory.theory.progressions.sad[num]);
+        }
+        else if(mood == 'Hopeful')
+        {
+            num = Math.floor(Math.random() * 100) % coreTheory.theory.progressions.hopeful.length;
+
+            generateFourChords(structure = coreTheory.theory.progressions.hopeful[num]);
+        }
+        else
+        {
+            console.log(mood + " is not a valid mood.");
+
+            return {};
         }
     }
 
