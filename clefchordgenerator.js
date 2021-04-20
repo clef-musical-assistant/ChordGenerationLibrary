@@ -3,53 +3,19 @@ var chord = require('./chord');
 var note = require('./note');
 
 exports.generateChordProgression = function(root, operator, adjective, mood = 'N/A') {
-    var chordProgression = {progToRender: '', romanProgToRender: '', progForRNN: '', chords: [], notesInChords: []};
+    var chordProgression = {testing: [], progToRender: '', romanProgToRender: '', progForRNN: '', chords: [], notesInChords: []};
     var counter = 0, ptr;
     var allChords = [];
 
     const generateAllChordsMajor = function()
     {
         var keys;
+        var pattern = coreTheory.theory.patterns.major;
 
-        if(operator == "#")
-            keys = coreTheory.theory.keysSharp;
-        else 
-            keys = coreTheory.theory.keysFlat;
-
-        for (ptr = 0; ptr < 12; ptr++)
-            if (keys.roots[ptr] == root)
-                break;
-
-        if (operator == "#")
-            ptr = (ptr + 1) % 12;
-        else if (operator == '\u266D')
-            ptr = (ptr - 1 == -1) ? 11 : (ptr - 1) % 12;
-
-        allChords.push(keys.roots[ptr]);
-
-        for (var i = 1; i < 7; i++)
-        {
-            ptr += keys.pattern[i];
-
-            if (i == 6)
-                allChords.push(keys.roots[ptr % 12] + "dim");
-            else if (6 % (i + 1) == 0)
-                allChords.push(keys.roots[ptr % 12] + "m");
-            else
-                allChords.push(keys.roots[ptr % 12]);
-        }
-
-        return allChords;
-    }
-
-    const generateAllChordsMinor = function()
-    {
-        var keys;
-
-        if(operator == "#")
-            keys = coreTheory.theory.keysSharp;
-        else 
-            keys = coreTheory.theory.keysFlat;
+        if(operator == "\u266D")
+            keys = coreTheory.theory.keys.flat;
+        else
+            keys = coreTheory.theory.keys.sharp;
 
         for (ptr = 0; ptr < 12; ptr++)
             if (keys[ptr] == root)
@@ -60,18 +26,54 @@ exports.generateChordProgression = function(root, operator, adjective, mood = 'N
         else if (operator == '\u266D')
             ptr = (ptr - 1 == -1) ? 11 : (ptr - 1) % 12;
 
-        allChords.push(keys.roots[ptr] + "m");
+        allChords.push(keys[ptr]);
 
         for (var i = 1; i < 7; i++)
         {
-            ptr += keys.pattern[i];
+            ptr += pattern[i];
+
+            if (i == 6)
+                allChords.push(keys[ptr % 12] + "dim");
+            else if (6 % (i + 1) == 0)
+                allChords.push(keys[ptr % 12] + "m");
+            else
+                allChords.push(keys[ptr % 12]);
+        }
+
+        return allChords;
+    }
+
+    const generateAllChordsMinor = function()
+    {
+        var keys;
+        var pattern = coreTheory.theory.patterns.minor;
+
+        if(operator == "\u266D")
+            keys = coreTheory.theory.keys.flat;
+        else 
+            keys = coreTheory.theory.keys.sharp;
+
+        for (ptr = 0; ptr < 12; ptr++)
+            if (keys[ptr] == root)
+                break;
+
+        if (operator == "#")
+            ptr = (ptr + 1) % 12;
+        else if (operator == '\u266D')
+            ptr = (ptr - 1 == -1) ? 11 : (ptr - 1) % 12;
+
+        allChords.push(keys[ptr] + "m");
+
+        for (var i = 1; i < 7; i++)
+        {
+            ptr += pattern[i];
 
             if (i == 1)
-                allChords.push(keys.roots[ptr % 12] + "dim");
+                allChords.push(keys[ptr % 12] + "dim");
             else if (20 % (i + 1) == 0)
-                allChords.push(keys.roots[ptr % 12] + "m");
+                allChords.push(keys[ptr % 12] + "m");
             else
-                allChords.push(keys.roots[ptr % 12]);
+                allChords.push(keys[ptr % 12]);
         }
 
         return allChords;
@@ -140,6 +142,8 @@ exports.generateChordProgression = function(root, operator, adjective, mood = 'N
         generateAllChordsMajor();
     else
         generateAllChordsMinor();
+
+    chordProgression.testing = allChords;
 
     if(mood == 'N/A')
         generateFourChords();
